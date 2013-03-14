@@ -1,0 +1,231 @@
+{
+  "title": "Tweet Dashboard",
+  "rows": [
+    {
+      "title": "Query",
+      "height": "50px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "span": 5,
+          "editable": true,
+          "group": [
+            "default"
+          ],
+          "type": "timepicker",
+          "mode": "relative",
+          "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h"
+          ],
+          "timespan": "5m",
+          "timefield": "created-at",
+          "index": "\"twitter\"",
+          "defaultindex": "NOINDEX",
+          "refresh": {
+            "enable": false,
+            "interval": 30,
+            "min": 3
+          },
+          "time": {
+            "from": "03/13/2013 23:04:13",
+            "to": "03/13/2013 23:09:13"
+          },
+          "index_interval": "day",
+          "timed_indices": true
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "group": [
+            "default"
+          ],
+          "type": "stringquery",
+          "label": "Search",
+          "query": "place.country-code:en",
+          "size": 100,
+          "sort": [
+            "_score",
+            "desc"
+          ],
+          "multi": false,
+          "multi_arrange": "horizontal"
+        },
+        {
+          "span": 3,
+          "editable": true,
+          "group": [
+            "default"
+          ],
+          "type": "dashcontrol",
+          "save": {
+            "gist": true,
+            "elasticsearch": true,
+            "local": true,
+            "default": true
+          },
+          "load": {
+            "gist": true,
+            "elasticsearch": true,
+            "local": true
+          },
+          "elasticsearch_size": 20,
+          "elasticsearch_saveto": "kibana-int",
+          "error": false,
+          "temp_ttl": "30d",
+          "hide_control": false,
+          "temp": true,
+          "hide": false
+        }
+      ],
+      "collapsable": true
+    },
+    {
+      "title": "Analytics",
+      "height": "250px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "span": 3,
+          "editable": true,
+          "group": [
+            "default"
+          ],
+          "type": "pie",
+          "query": {
+            "field": "place.country.keyword",
+            "query": "place.country-code:en",
+            "goal": 1
+          },
+          "size": 10,
+          "exclude": [],
+          "donut": false,
+          "tilt": false,
+          "legend": false,
+          "labels": true,
+          "mode": "terms",
+          "default_field": "_all",
+          "index": [
+            "twitter"
+          ],
+          "loading": false,
+          "spyable": true
+        },
+        {
+          "span": 5,
+          "editable": true,
+          "group": [
+            "default"
+          ],
+          "type": "histogram",
+          "query": [
+            {
+              "query": "place.country-code:en",
+              "label": "place.country-code:en"
+            }
+          ],
+          "interval": "5s",
+          "show": [
+            "bars",
+            "y-axis",
+            "x-axis",
+            "legend"
+          ],
+          "fill": 3,
+          "timezone": "browser",
+          "index": [
+            "twitter"
+          ],
+          "loading": false
+        },
+        {
+          "span": 4,
+          "editable": true,
+          "group": [
+            "default"
+          ],
+          "type": "map",
+          "query": "place.country-code:en",
+          "map": "world",
+          "colors": [
+            "#E5FCC2",
+            "#9DE0AD",
+            "#45ADA8"
+          ],
+          "size": 100,
+          "exclude": [],
+          "index": [
+            "twitter"
+          ],
+          "field": "place.country-code",
+          "loading": false
+        }
+      ],
+      "collapsable": true
+    },
+    {
+      "title": "Table",
+      "height": "350px",
+      "editable": true,
+      "collapse": false,
+      "panels": [
+        {
+          "span": 2,
+          "editable": true,
+          "group": [
+            "default"
+          ],
+          "type": "fields",
+          "title": "Fields",
+          "style": {},
+          "arrange": "vertical",
+          "micropanel_position": "right",
+          "query": "place.country-code:en",
+          "index": [
+            "twitter"
+          ],
+          "error": false,
+          "sort": [
+            "created-at",
+            "desc"
+          ]
+        },
+        {
+          "span": 10,
+          "editable": true,
+          "group": [
+            "default"
+          ],
+          "type": "table",
+          "title": "Events",
+          "query": "place.country-code:en",
+          "size": 100,
+          "offset": 0,
+          "sort": [
+            "created-at",
+            "desc"
+          ],
+          "style": {},
+          "fields": [
+            "created-at",
+            "user.name",
+            "text"
+          ],
+          "index": [
+            "twitter"
+          ],
+          "error": false,
+          "loading": false
+        }
+      ],
+      "collapsable": true
+    }
+  ],
+  "editable": true
+}
