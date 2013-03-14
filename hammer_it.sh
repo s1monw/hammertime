@@ -14,12 +14,12 @@
 # No Slides -  No Bullshit!!
 #####################################################################################
 
-# Get ElasticSearch
-wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.0.Beta1.zip
-unzip elasticsearch-0.90.0.Beta1.zip
-ln -s elasticsearch-0.90.0.Beta1 elasticsearch
+# Run the setup...
+./bin/setup.sh
 
 # Let's fire up a node and see what happens
+# This really only starts an ES node by running ./elasticsearch/bin/elasticsearch
+# plus some sugar... go check it out...
 ./bin/fireupNode.sh mc-hammer
 
 # "Is it running?"
