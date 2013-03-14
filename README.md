@@ -1,5 +1,3 @@
-hammertime
-==========
 ```
 #####################################################################################
 #  ___ ___                                       ___________.__                
@@ -11,15 +9,20 @@ hammertime
 # With a Hammer in your Hand... ElasticSearch
 #####################################################################################
 ```
-The ultimat 'no slides no bullshit' introduction to ElasticSearch
+The ultimate `no slides no bullshit` introduction to ElasticSearch
 
 Run 
 ```bash
 ./bin/setup.sh
 ```
 
-and then go through 'hammer_it.sh' and let ElasticSearch show it's potential
+and then go through `hammer_it.sh` and let ElasticSearch show it's potential
 and awesomeness.
+
+
+This introduction will make heavy use of elasticsearch tooling like [stream2es](https://github.com/elasticsearch/stream2es) 
+or [kibana-dashboard](https://github.com/elasticsearch/kibana-dashboard) as well as online data fetch from twitter via your
+personal twitter account. In order to go through all the examples you should have a reasonable internet connection.
 
 
 
