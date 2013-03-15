@@ -30,7 +30,7 @@ curl -s -XGET 'http://localhost:9200?pretty=true'
 # How do I get data in?
 #####################################################################################
 
-curl -s -XPUT 'http://localhost:9200/hacker_index/hacker/1' -d '{
+curl -s -XPUT 'http://localhost:9200/hacker_index/hacker/1?pretty=true' -d '{
   "name" : "Simon Willnauer",
   "profession" : [ "Co-Founder Lucene Hacker @ ElasticSearch",
                    "Lucene Core Committer since 2006 and PMC Member"],
@@ -58,7 +58,7 @@ curl -s -XGET 'localhost:9200/hacker_index/_search?q=simon&pretty=true'
 curl -s -XGET 'http://localhost:9200/_cluster/nodes/stats?pretty=true' 
 
 # Create an index - we don't need replicas for now....
-curl -s -XPUT 'http://localhost:9200/twitter/' -d '{
+curl -s -XPUT 'http://localhost:9200/twitter/?pretty=true' -d '{
     "settings" : {
         "index" : {
             "number_of_shards" : 3,
@@ -336,7 +336,7 @@ curl -s -XGET 'http://localhost:9200/twitter_us_only/_search?pretty=true'
 # Lets decommission node "snoop" but first move all shards away from this node
 #####################################################################################
 
-curl -s -XPUT 'localhost:9200/twitter/_settings' -d '{
+curl -s -XPUT 'localhost:9200/twitter_production,hacker_index/_settings?pretty=true' -d '{
     "index.routing.allocation.exclude.name" : "snoop"
 }'
 
@@ -344,7 +344,7 @@ curl -s -XPUT 'localhost:9200/twitter/_settings' -d '{
 open http://karmi.github.com/elasticsearch-paramedic/
 
 # ok lets flush all RAM buffers to disk and empty transaction logs before we shut down
-curl -s -XGET 'localhost:9200/twitter/_flush'
+curl -s -XGET 'localhost:9200/twitter_production/_flush'
 
 # now we can shut down that node
 ./bin/takedownNode.sh snoop
