@@ -11,6 +11,6 @@ then
   exit $E_BADARGS
 fi
 
-PARENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/..
+PARENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 kill `cat $PARENT/$1.pid`
 echo "send kill command to node "$1

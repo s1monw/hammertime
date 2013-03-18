@@ -20,6 +20,8 @@
 # Let's fire up a node and see what happens
 # This really only starts an ES node by running ./elasticsearch/bin/elasticsearch
 # plus some sugar... go check it out...
+# Note: this starts nodes with a clustername set to the output of `whoami` to prevent
+# fetching your neighbors data!
 ./bin/fireupNode.sh mc-hammer
 
 # "Is it running?"
@@ -28,6 +30,7 @@ curl -s -XGET 'http://localhost:9200?pretty=true'
 
 #####################################################################################
 # How do I get data in?
+# ElasticSearch by default takes any json and "tries to do the right thing"
 #####################################################################################
 
 curl -s -XPUT 'http://localhost:9200/hacker_index/hacker/1?pretty=true' -d '{
@@ -35,15 +38,17 @@ curl -s -XPUT 'http://localhost:9200/hacker_index/hacker/1?pretty=true' -d '{
   "profession" : [ "Co-Founder Lucene Hacker @ ElasticSearch",
                    "Lucene Core Committer since 2006 and PMC Member"],
   "passion" : "Information Retrieval, Machine Learning, Concurrency",
-  "freetime" : "Runner, Father & Berlin Buzzwords Co-Organizer"
+  "freetime" : "Runner, Swimmer, Father & Berlin Buzzwords Co-Organizer"
+  "twitter" : "https://www.twitter.com/s1m0nw"
 }'
 
 
-# Is it there?
+# Is it there? - NoSQL you know! 
+# This operation is RealTime... "did he say realtime?" ;)
 curl -s -XGET 'localhost:9200/hacker_index/hacker/1?pretty=true' 
-# NoSQL you know!
 
-# Or just search 
+# Or just search - Lucene you know! 
+# This operation is NearRealTime ~1 second default delay
 curl -s -XGET 'localhost:9200/hacker_index/_search?q=simon&pretty=true'
 
 # Looks pretty manual doesn't it...?
@@ -67,24 +72,26 @@ curl -s -XPUT 'http://localhost:9200/twitter/?pretty=true' -d '{
     }
 }'
 
-# Ok lets move on and use some tools
+# Ok lets move on and use some tools - tries to read from localhost:9200
 open http://karmi.github.com/elasticsearch-paramedic/
 
 # Start indexing twitter
 # curl -s -O download.elasticsearch.org/stream2es/stream2es; chmod +x stream2es
 ./bin/stream2es twitter --user $TWITTER_USER --pass $TWITTER_PW
 
-# or if you don't have an internet connection or no twitter account just push the raw data into ElasticSearch
-cat raw_data.json | bin/stream2es stdin -i twitter -t status
-
+# Backup for no internet connection... 
+# just push the raw data into ElasticSearch
+# cat raw_data.json | bin/stream2es stdin -i twitter -t status
 
 # Check Paramedic again
 open http://karmi.github.com/elasticsearch-paramedic/
 
 # what's happening? No Schema?
+# ElasticSearch deploys a default schema based on your data!
 curl -s -XGET 'http://localhost:9200/twitter/_mapping?pretty=true'
 
 # Dude, some redundancy would be awesome!
+# Scale out replicas dynamically!
 curl -s -XPUT 'localhost:9200/twitter/_settings' -d '{
     "index" : {
         "number_of_replicas" : 1,
@@ -104,6 +111,8 @@ open http://karmi.github.com/elasticsearch-paramedic/
 
 #####################################################################################
 # Let start searching some data
+# Note: some of the queries might not return anything since we indexed
+# live data from twitter - try plying with them.
 #####################################################################################
 
 # Perfect let's explore the data we have so far....

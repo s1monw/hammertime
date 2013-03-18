@@ -21,7 +21,9 @@ then
   exit $E_BADARGS
 fi
 CLUSTER=`eval whoami`
-PARENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/..
+PARENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
+echo "Starting node "$1
+echo "cmd: "$PARENT"/elasticsearch/bin/elasticsearch -Des.cluster.name="$CLUSTER" -Des.path.data="$PARENT"/data -Des.node.name="$1" -p "$PARENT"/"$1".pid"
 $PARENT/elasticsearch/bin/elasticsearch -Des.cluster.name=$CLUSTER -Des.path.data=$PARENT/data -Des.node.name=$1 -p $PARENT/$1.pid
 
 NODE_STATS=`curl -s -XGET 'http://localhost:9200/_cluster/nodes/'$1'/stats'`
