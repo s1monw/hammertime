@@ -47,7 +47,7 @@
           ],
           "type": "stringquery",
           "label": "Search",
-          "query": "place.country-code:en",
+          "query": "place.country-code:US",
           "size": 100,
           "sort": [
             "_score",
