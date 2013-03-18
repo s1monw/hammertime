@@ -1,4 +1,7 @@
 #!/bin/bash
+# Note: This requires http://stedolan.github.com/jq/
+# This tool fetches the _source from an elasticsearch
+# index and writes it to stdout
 
 E_BADARGS=85
 
