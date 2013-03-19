@@ -1,4 +1,3 @@
-
 #####################################################################################
 #  ___ ___                                       ___________.__                
 # /   |   \_____    _____   _____   ___________  \__    ___/|__| _____   ____  
@@ -12,6 +11,7 @@
 
 #####################################################################################
 # No Slides -  No Bullshit!!
+# http://www.github.com/s1monw/hammertime
 #####################################################################################
 
 # Run the setup...
@@ -38,7 +38,7 @@ curl -s -XPUT 'http://localhost:9200/hacker_index/hacker/1?pretty=true' -d '{
   "profession" : [ "Co-Founder Lucene Hacker @ ElasticSearch",
                    "Lucene Core Committer since 2006 and PMC Member"],
   "passion" : "Information Retrieval, Machine Learning, Concurrency",
-  "freetime" : "Runner, Swimmer, Father & Berlin Buzzwords Co-Organizer"
+  "freetime" : "Runner, Swimmer, Father & Berlin Buzzwords Co-Organizer",
   "twitter" : "https://www.twitter.com/s1m0nw"
 }'
 
@@ -145,7 +145,7 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
     "query": { 
         "filtered" : {
             "query" : {
-                "match": { "text" : "tweet" } 
+                "match": { "text" : "LOL" } 
             },
             "filter" : {
                 "query": {
@@ -193,7 +193,7 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
     "query": { 
         "match_phrase_prefix": { 
             "text" :  {
-                "query" : "search as you"
+                "query" : "see"
            } 
         }
     },
@@ -250,7 +250,7 @@ curl -s -XPUT 'http://localhost:9200/twitter/' -d @twitter_mapping.json
 ./bin/stream2es twitter --user $TWITTER_USER --pass $TWITTER_PW
 
 # Or use the backup data
-cat backup_data.json | bin/stream2es stdin -i twitter -t status
+#cat backup_data.json | bin/stream2es stdin -i twitter -t status
 
 # Find active countries and get the total counts... NOW with the actual country name
 curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d '{
@@ -302,7 +302,7 @@ curl -s -XPUT 'http://localhost:9200/twitter_ng/' -d @twitter_mapping.json
 ./bin/stream2es twitter -i twitter_ng --user $TWITTER_USER --pass $TWITTER_PW
 
 # Or use the backup data
-cat raw_data.json | bin/stream2es stdin -i twitter_ng -t status
+#cat raw_data.json | bin/stream2es stdin -i twitter_ng -t status
 
 # Make sure we can see the data...
 curl -s -XGET 'http://localhost:9200/twitter,twitter_ng/_refresh?pretty=true'
@@ -345,15 +345,15 @@ curl -s -XGET 'http://localhost:9200/twitter_us_only/_search?pretty=true'
 # Lets decommission node "snoop" but first move all shards away from this node
 #####################################################################################
 
+# ok lets flush all RAM buffers to disk and empty transaction logs before we shut down
+curl -s -XGET 'localhost:9200/twitter_production/_flush'
+
 curl -s -XPUT 'localhost:9200/twitter_production,hacker_index/_settings?pretty=true' -d '{
     "index.routing.allocation.exclude.name" : "snoop"
 }'
 
 # Check paramedic
 open http://karmi.github.com/elasticsearch-paramedic/
-
-# ok lets flush all RAM buffers to disk and empty transaction logs before we shut down
-curl -s -XGET 'localhost:9200/twitter_production/_flush'
 
 # now we can shut down that node
 ./bin/takedownNode.sh snoop
@@ -367,7 +367,7 @@ open http://karmi.github.com/elasticsearch-paramedic/
 # Use the Cluster Update API
 # wait - relocating shards is a pretty heavy operation
 
-curl -s -XPUT 'localhost:9200/_cluster/settings' -d '{                                                                                                                                                                                                             
+curl -s -XPUT 'localhost:9200/_cluster/settings' -d '{                                                                                                                                                                    
     "cluster.routing.allocation.node_concurrent_recoveries" : 1,
     "cluster.routing.allocation.cluster_concurrent_rebalance" : 1,
     "indices.recovery.concurrent_streams" : 1
