@@ -7,7 +7,7 @@ else
   echo "Downloading latest ElasticSearch Build"
   curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-master.zip
   unzip -d ${PARENT} elasticsearch-master.zip 
-  ln -s ${PARENT}/elasticsearch-0.90.0.Beta2-SNAPSHOT ${PARENT}/elasticsearch
+  ln -s ${PARENT}/elasticsearch-0.90.0.Beta3-SNAPSHOT ${PARENT}/elasticsearch
   rm elasticsearch-master.zip
 fi
 
