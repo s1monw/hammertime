@@ -15,7 +15,7 @@
 #####################################################################################
 
 # Run the setup...
-./bin/setup.sh
+#./bin/setup.sh
 
 # Let's fire up a node and see what happens
 # This really only starts an ES node by running ./elasticsearch/bin/elasticsearch
@@ -35,11 +35,13 @@ curl -s -XGET 'http://localhost:9200?pretty=true'
 
 curl -s -XPUT 'http://localhost:9200/hacker_index/hacker/1?pretty=true' -d '{
   "name" : "Simon Willnauer",
-  "profession" : [ "Co-Founder Lucene Hacker @ ElasticSearch",
+  "profession" : [ "Co-Founder & Lucene Hacker @ ElasticSearch",
                    "Lucene Core Committer since 2006 and PMC Member"],
-  "passion" : "Information Retrieval, Machine Learning, Concurrency",
+  "passion" : "Information Retrieval, NLP, Machine Learning, Concurrency",
   "freetime" : "Runner, Swimmer, Father & Berlin Buzzwords Co-Organizer",
   "twitter" : "https://www.twitter.com/s1m0nw"
+  "github" : "http://www.github.com/s1monw/"
+  "company" : "http://elasticsearch.com/about/careers/"
 }'
 
 
@@ -78,6 +80,20 @@ open http://karmi.github.com/elasticsearch-paramedic/
 # Start indexing twitter
 # curl -s -O download.elasticsearch.org/stream2es/stream2es; chmod +x stream2es
 ./bin/stream2es twitter --user $TWITTER_USER --pass $TWITTER_PW
+
+# this will index tweets similar to this one:
+curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
+{
+   "_id":"xXx",
+   "user":{
+      "screen-name":"simonw",
+      "name":"simon willnauer",
+      "created-at":"2010-11-11T15:02:59Z",
+      "id":214497014
+   },
+   "text":"Good Morning GeeCon",
+   "created-at":"2013-05-16T06:23:53Z"
+}'
 
 # Backup for no internet connection... 
 # just push the raw data into ElasticSearch
@@ -169,7 +185,7 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
             "query" : {
                 "match": { 
                     "text" :  {
-                        "query" : "stream to see tweets",
+                        "query" : "this is geecon",
                         "cutoff_frequency" : 0.01
                     }
                 } 
@@ -188,13 +204,11 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
     }
 }'
 
-# or do "Search As You Type"
-curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
+# or do "Search As You Type" / Query Suggestions
+curl -s -XPOST 'localhost:9200/twitter/_search?size=0&pretty=true' -d '{
     "query": { 
         "match_phrase_prefix": { 
-            "text" :  {
-                "query" : "see"
-           } 
+            "user.name" : "simon willn"
         }
     },
     "facets": {
@@ -357,25 +371,6 @@ open http://karmi.github.com/elasticsearch-paramedic/
 
 # now we can shut down that node
 ./bin/takedownNode.sh snoop
-
-# Check paramedic
-open http://karmi.github.com/elasticsearch-paramedic/
-
-# We are done with maintenance...
-# Let’s start the node again....
-# wait - relocating shards is a pretty heavy operation
-# Use the Cluster Update API
-# wait - relocating shards is a pretty heavy operation
-
-curl -s -XPUT 'localhost:9200/_cluster/settings' -d '{                                                                                                                                                                    
-    "cluster.routing.allocation.node_concurrent_recoveries" : 1,
-    "cluster.routing.allocation.cluster_concurrent_rebalance" : 1,
-    "indices.recovery.concurrent_streams" : 1
-}'   
-
-
-# start the node up again - shards are moving again
-./bin/fireupNode.sh busta-ryhmes
 
 # Bring down all nodes...
 ./bin/takedownNode.sh ice-t
