@@ -39,8 +39,8 @@ curl -s -XPUT 'http://localhost:9200/hacker_index/hacker/1?pretty=true' -d '{
                    "Lucene Core Committer since 2006 and PMC Member"],
   "passion" : "Information Retrieval, NLP, Machine Learning, Concurrency",
   "freetime" : "Runner, Swimmer, Father & Berlin Buzzwords Co-Organizer",
-  "twitter" : "https://www.twitter.com/s1m0nw"
-  "github" : "http://www.github.com/s1monw/"
+  "twitter" : "https://www.twitter.com/s1m0nw",
+  "github" : "http://www.github.com/s1monw/",
   "company" : "http://elasticsearch.com/about/careers/"
 }'
 
@@ -179,7 +179,7 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
 
 
 # with common terms query 
-curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
+curl -s -XGET 'localhost:9200/twitter/_search?pretty=true' -d '{
     "query": { 
         "filtered" : {
             "query" : {
@@ -205,7 +205,7 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
 }'
 
 # or do "Search As You Type" / Query Suggestions
-curl -s -XPOST 'localhost:9200/twitter/_search?size=0&pretty=true' -d '{
+curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
     "query": { 
         "match_phrase_prefix": { 
             "user.name" : "simon willn"
@@ -371,6 +371,8 @@ open http://karmi.github.com/elasticsearch-paramedic/
 
 # now we can shut down that node
 ./bin/takedownNode.sh snoop
+
+
 
 # Bring down all nodes...
 ./bin/takedownNode.sh ice-t
