@@ -5,10 +5,10 @@ if [ -d ${PARENT}/elasticsearch ]; then
  echo "elasticsearch already exists in "${PARENT}" - skipping"
 else 
   echo "Downloading latest ElasticSearch Build"
-  curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-master.zip
-  unzip -d ${PARENT} elasticsearch-master.zip 
-  ln -s ${PARENT}/elasticsearch-0.90.0.Beta3-SNAPSHOT ${PARENT}/elasticsearch
-  rm elasticsearch-master.zip
+  curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.1.zip
+  unzip -d ${PARENT} elasticsearch-0.90.1.zip 
+  ln -s ${PARENT}/elasticsearch-0.90.1 ${PARENT}/elasticsearch
+  rm elasticsearch-0.90.1.zip
 fi
 
 if [ -f ${CURRENT}/stream2es ]; then
