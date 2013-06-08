@@ -24,5 +24,5 @@ This introduction will make heavy use of elasticsearch tooling like [stream2es](
 or [kibana-dashboard](https://github.com/elasticsearch/kibana-dashboard) as well as online data fetch from twitter via your
 personal twitter account. In order to go through all the examples you should have a reasonable internet connection.
 
-
+Here is a [video](http://vimeo.com/66303050) of me giving this talk at NoSQL Matters in Cologne 2013. 
 
