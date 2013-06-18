@@ -26,3 +26,5 @@ personal twitter account. In order to go through all the examples you should hav
 
 Here is a [video](http://vimeo.com/66303050) of me giving this talk at NoSQL Matters in Cologne 2013. 
 
+**NOTE:** [stream2es](https://github.com/elasticsearch/stream2es) requires a setup step in order to stream data from twitter directly. Check out the documentation from [here](https://github.com/elasticsearch/stream2es) how initally setup the tools. All you need is a working twitter account and you should be ready to go.
+ 
