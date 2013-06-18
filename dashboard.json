@@ -24,7 +24,7 @@
             "24h"
           ],
           "timespan": "5m",
-          "timefield": "created-at",
+          "timefield": "created_at",
           "index": "\"twitter\"",
           "defaultindex": "NOINDEX",
           "refresh": {
@@ -47,7 +47,7 @@
           ],
           "type": "stringquery",
           "label": "Search",
-          "query": "place.country-code:US",
+          "query": "place.country_code:US",
           "size": 100,
           "sort": [
             "_score",
@@ -100,7 +100,7 @@
           "type": "pie",
           "query": {
             "field": "place.country.keyword",
-            "query": "place.country-code:en",
+            "query": "place.country_code:en",
             "goal": 1
           },
           "size": 10,
@@ -126,8 +126,8 @@
           "type": "histogram",
           "query": [
             {
-              "query": "place.country-code:en",
-              "label": "place.country-code:en"
+              "query": "place.country_code:en",
+              "label": "place.country_node:en"
             }
           ],
           "interval": "5s",
@@ -151,7 +151,7 @@
             "default"
           ],
           "type": "map",
-          "query": "place.country-code:en",
+          "query": "place.country_code:en",
           "map": "world",
           "colors": [
             "#E5FCC2",
@@ -163,7 +163,7 @@
           "index": [
             "twitter"
           ],
-          "field": "place.country-code",
+          "field": "place.country_code",
           "loading": false
         }
       ],
@@ -186,13 +186,13 @@
           "style": {},
           "arrange": "vertical",
           "micropanel_position": "right",
-          "query": "place.country-code:en",
+          "query": "place.country_code:en",
           "index": [
             "twitter"
           ],
           "error": false,
           "sort": [
-            "created-at",
+            "created_at",
             "desc"
           ]
         },
@@ -204,16 +204,16 @@
           ],
           "type": "table",
           "title": "Events",
-          "query": "place.country-code:en",
+          "query": "place.country_code:en",
           "size": 100,
           "offset": 0,
           "sort": [
-            "created-at",
+            "created_at",
             "desc"
           ],
           "style": {},
           "fields": [
-            "created-at",
+            "created_at",
             "user.name",
             "text"
           ],

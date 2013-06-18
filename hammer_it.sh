@@ -79,7 +79,8 @@ open http://karmi.github.com/elasticsearch-paramedic/
 
 # Start indexing twitter
 # curl -s -O download.elasticsearch.org/stream2es/stream2es; chmod +x stream2es
-./bin/stream2es twitter --user $TWITTER_USER --pass $TWITTER_PW
+# visit https://github.com/elasticsearch/stream2es for how to setup twitter streaming with OAuth
+./bin/stream2es twitter 
 
 # this will index tweets similar to this one:
 curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
@@ -261,7 +262,7 @@ curl -s -XDELETE 'http://localhost:9200/twitter?pretty=true'
 curl -s -XPUT 'http://localhost:9200/twitter/' -d @twitter_mapping.json
   
 # start indexing again
-./bin/stream2es twitter --user $TWITTER_USER --pass $TWITTER_PW
+./bin/stream2es twitter 
 
 # Or use the backup data
 #cat backup_data.json | bin/stream2es stdin -i twitter -t status
@@ -313,7 +314,7 @@ open kibana-dashboard/index.html
 curl -s -XPUT 'http://localhost:9200/twitter_ng/' -d @twitter_mapping.json
   
 # start indexing again
-./bin/stream2es twitter -i twitter_ng --user $TWITTER_USER --pass $TWITTER_PW
+./bin/stream2es twitter -i twitter_ng
 
 # Or use the backup data
 #cat raw_data.json | bin/stream2es stdin -i twitter_ng -t status
