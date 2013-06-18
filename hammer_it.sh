@@ -89,11 +89,11 @@ curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
    "user":{
       "screen-name":"simonw",
       "name":"simon willnauer",
-      "created-at":"2010-11-11T15:02:59Z",
+      "created_at":"2010-11-11T15:02:59Z",
       "id":214497014
    },
    "text":"Good Morning GeeCon",
-   "created-at":"2013-05-16T06:23:53Z"
+   "created_at":"2013-05-16T06:23:53Z"
 }'
 
 # Backup for no internet connection... 
@@ -157,7 +157,7 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
 }
 '
 
-# a simple match query on field 'text'
+# a simple match query on field 'text' - you might wanna change the query :)
 curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
     "query": { 
         "filtered" : {
@@ -228,7 +228,7 @@ curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d
         "constant_score": {
            "filter": {
                "range" : {
-                    "created-at" : { 
+                    "created_at" : { 
                         "from" : "now-10d", 
                         "to" : "now", 
                         "include_lower" : true, 
@@ -241,7 +241,7 @@ curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d
     "facets": {
        "active_countries": {
           "terms": {
-            "field" : "place.country-code",
+            "field" : "place.country_code",
             "size" : 10
           }
        }
@@ -249,39 +249,25 @@ curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d
 }'
 
 #####################################################################################
-# OK awesome but why do we have to use the country code? - Lets add some mapping
+# OK awesome but why do we have to use the country code? - We can facet on the country
+# keyword, no?
 #
 #####################################################################################
-# backup the data from your index
-./bin/fetchSource.sh twitter > backup_data.json
 
-# Delete the index
-curl -s -XDELETE 'http://localhost:9200/twitter?pretty=true'
-
-# Create an index - with all the settings
-curl -s -XPUT 'http://localhost:9200/twitter/' -d @twitter_mapping.json
-  
-# start indexing again
-./bin/stream2es twitter 
-
-# Or use the backup data
-#cat backup_data.json | bin/stream2es stdin -i twitter -t status
-
-# Find active countries and get the total counts... NOW with the actual country name
 curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d '{
-    "query": {
+    "query": { 
         "constant_score": {
            "filter": {
                "range" : {
-                    "created-at" : {
-                        "from" : "now-10d",
-                        "to" : "now",
-                        "include_lower" : true,
+                    "created_at" : { 
+                        "from" : "now-10d", 
+                        "to" : "now", 
+                        "include_lower" : true, 
                         "include_upper": false
-                    }
+                    }           
                 }
-             }
-        }
+            }
+        } 
     },
     "facets": {
        "active_countries": {
@@ -310,8 +296,8 @@ open kibana-dashboard/index.html
 # This was pretty awesome but what if your data grows beyond the shards you have?
 #####################################################################################
 
-# Create yet another index - with all the settings
-curl -s -XPUT 'http://localhost:9200/twitter_ng/' -d @twitter_mapping.json
+# Create yet another index
+curl -s -XPUT 'http://localhost:9200/twitter_ng/'
   
 # start indexing again
 ./bin/stream2es twitter -i twitter_ng
