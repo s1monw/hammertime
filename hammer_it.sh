@@ -64,16 +64,6 @@ curl -s -XGET 'localhost:9200/hacker_index/_search?q=simon&pretty=true'
 # Check which Nodes are running
 curl -s -XGET 'http://localhost:9200/_cluster/nodes/stats?pretty=true' 
 
-# Create an index - we don't need replicas for now....
-curl -s -XPUT 'http://localhost:9200/twitter/?pretty=true' -d '{
-    "settings" : {
-        "index" : {
-            "number_of_shards" : 3,
-            "number_of_replicas" : 0
-        }
-    }
-}'
-
 # Ok lets move on and use some tools - tries to read from localhost:9200
 open http://karmi.github.com/elasticsearch-paramedic/
 
@@ -89,11 +79,11 @@ curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
    "user":{
       "screen-name":"simonw",
       "name":"simon willnauer",
-      "created_at":"2010-11-11T15:02:59Z",
+      "created_at":"Wed Jun 18 16:04:28 +0000 2013",
       "id":214497014
    },
-   "text":"Good Morning GeeCon",
-   "created_at":"2013-05-16T06:23:53Z"
+   "text":"Hey Hey Xing ;)",
+   "created_at":"Wed Jun 19 16:04:28 +0000 2013"
 }'
 
 # Backup for no internet connection... 
