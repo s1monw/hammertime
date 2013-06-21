@@ -25,7 +25,7 @@
           ],
           "timespan": "5m",
           "timefield": "created_at",
-          "index": "\"twitter\"",
+          "index": "[twitter]",
           "defaultindex": "NOINDEX",
           "refresh": {
             "enable": false,
@@ -47,7 +47,7 @@
           ],
           "type": "stringquery",
           "label": "Search",
-          "query": "place.country_code:US",
+          "query": "place.country_code:us",
           "size": 100,
           "sort": [
             "_score",
