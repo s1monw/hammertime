@@ -283,7 +283,8 @@ curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d
 # Lets take this into something real...
 #####################################################################################
 
-# Download Kibana 
+# Download Kibana - Note: this is a dev version! If chrome gives you a hard time 
+# try a different browser! On MacOS Safari works most of the time ;) #cutting_edge 
 
 git clone git@github.com:elasticsearch/kibana.git
 open kibana/index.html
@@ -348,6 +349,7 @@ curl -s -XGET 'http://localhost:9200/twitter_us_only/_search?pretty=true'
 # ok lets flush all RAM buffers to disk and empty transaction logs before we shut down
 curl -s -XGET 'localhost:9200/twitter_production/_flush'
 
+# exclude all indices from this node....
 curl -s -XPUT 'localhost:9200/twitter_production,hacker_index/_settings?pretty=true' -d '{
     "index.routing.allocation.exclude.name" : "snoop"
 }'
