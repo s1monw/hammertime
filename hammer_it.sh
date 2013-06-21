@@ -211,7 +211,15 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
     }
 }'
 
-# find active countries and get the total counts...
+
+#####################################################################################
+# Find active countries and get the total counts...
+#
+# We use some date math here to ensure we find something useful... the 'now' time is
+# based on UTC and is identical across all shards for a single request. Use 10m for 
+# 10 minutes or 1h for one hour. 
+#
+#####################################################################################
 curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d '{
     "query": { 
         "constant_score": {
@@ -241,6 +249,8 @@ curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d
 # OK awesome but why do we have to use the country code? - We can facet on the country
 # keyword, no?
 #
+# NOTE: we now facet on  place.country.keyword rather than place.country_code
+#       Keywords are very useful when working with facets - keep that in mind!
 #####################################################################################
 
 curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d '{
