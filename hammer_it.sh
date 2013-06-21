@@ -168,7 +168,6 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
     }
 }'
 
-
 # with common terms query 
 curl -s -XGET 'localhost:9200/twitter/_search?pretty=true' -d '{
     "query": { 
@@ -176,7 +175,7 @@ curl -s -XGET 'localhost:9200/twitter/_search?pretty=true' -d '{
             "query" : {
                 "match": { 
                     "text" :  {
-                        "query" : "this is geecon",
+                        "query" : "this is",
                         "cutoff_frequency" : 0.01
                     }
                 } 
@@ -274,10 +273,10 @@ curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d
 # Lets take this into something real...
 #####################################################################################
 
-# Download Kibana Dashboard 
+# Download Kibana 
 
-git clone git@github.com:elasticsearch/kibana-dashboard.git
-open kibana-dashboard/index.html
+git clone git@github.com:elasticsearch/kibana.git
+open kibana/index.html
 
 # Once you are done load the dashboard.json file contained in the current folder via the UI
 # and see the magic :) - enjoy!
