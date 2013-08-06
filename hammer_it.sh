@@ -65,7 +65,7 @@ curl -s -XGET 'localhost:9200/hacker_index/_search?q=simon&pretty=true'
 curl -s -XGET 'http://localhost:9200/_cluster/nodes/stats?pretty=true' 
 
 # Ok lets move on and use some tools - tries to read from localhost:9200
-open http://karmi.github.com/elasticsearch-paramedic/
+open http://karmi.github.io/elasticsearch-paramedic/
 
 # Start indexing twitter
 # curl -s -O download.elasticsearch.org/stream2es/stream2es; chmod +x stream2es
@@ -82,7 +82,7 @@ curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
       "created_at":"Wed Jun 18 16:04:28 +0000 2013",
       "id":214497014
    },
-   "text":"Hey Hey Xing ;)",
+   "text":"Hey Hey TOA 2013 ;)",
    "created_at":"Wed Jun 19 16:04:28 +0000 2013"
 }'
 
@@ -91,7 +91,7 @@ curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
 # cat raw_data.json | bin/stream2es stdin -i twitter -t status
 
 # Check Paramedic again
-open http://karmi.github.com/elasticsearch-paramedic/
+open http://karmi.github.io/elasticsearch-paramedic/
 
 # what's happening? No Schema?
 # ElasticSearch deploys a default schema based on your data!
@@ -107,13 +107,13 @@ curl -s -XPUT 'localhost:9200/twitter/_settings' -d '{
 }'
 
 # Check Paramedic again
-open http://karmi.github.com/elasticsearch-paramedic/
+open http://karmi.github.io/elasticsearch-paramedic/
 
 # Awesome now we have replicas and indexed some data lets move on and add another node
 ./bin/fireupNode.sh snoop
 
 # Check Paramedic again
-open http://karmi.github.com/elasticsearch-paramedic/
+open http://karmi.github.io/elasticsearch-paramedic/
 
 
 #####################################################################################
@@ -355,7 +355,7 @@ curl -s -XPUT 'localhost:9200/twitter_production,hacker_index/_settings?pretty=t
 }'
 
 # Check paramedic
-open http://karmi.github.com/elasticsearch-paramedic/
+open http://karmi.github.io/elasticsearch-paramedic/
 
 # now we can shut down that node
 ./bin/takedownNode.sh snoop
