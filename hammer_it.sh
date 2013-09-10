@@ -75,15 +75,15 @@ open http://karmi.github.io/elasticsearch-paramedic/
 # this will index tweets similar to this one:
 curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
 {
-   "_id":"xXx",
-   "user":{
-      "screen-name":"simonw",
-      "name":"simon willnauer",
-      "created_at":"Wed Jun 18 16:04:28 +0000 2013",
+   "_id" : "xXx",
+   "user" : {
+      "screen-name" : "simonw",
+      "name" : "simon willnauer",
+      "created_at" : "Wed Jun 18 16:04:28 +0000 2013",
       "id":214497014
    },
-   "text":"Hey Hey TOA 2013 ;)",
-   "created_at":"Wed Jun 19 16:04:28 +0000 2013"
+   "text" : "Hello Stockholm! ;)",
+   "created_at" : "Wed Jun 19 16:04:28 +0000 2013"
 }'
 
 # Backup for no internet connection... 
@@ -287,7 +287,8 @@ curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d
 # try a different browser! On MacOS Safari works most of the time ;) #cutting_edge 
 
 git clone git@github.com:elasticsearch/kibana.git
-open kibana/index.html
+cd kibana &&  python -m SimpleHTTPServer # start a python webserver
+open http://localhost:8000
 
 # Once you are done load the dashboard.json file contained in the current folder via the UI
 # and see the magic :) - enjoy!

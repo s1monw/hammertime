@@ -8,12 +8,25 @@
       "collapse": false,
       "panels": [
         {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "query",
+          "label": "Search",
+          "query": "*",
+          "pinned": true,
+          "history": [
+            "*"
+          ],
+          "remember": 10,
+          "title": "Fulltext Query"
+        },
+        {
+          "error": "",
           "span": 5,
           "editable": true,
-          "group": [
-            "default"
-          ],
           "type": "timepicker",
+          "status": "Stable",
           "mode": "relative",
           "time_options": [
             "5m",
@@ -21,66 +34,21 @@
             "1h",
             "6h",
             "12h",
-            "24h"
+            "24h",
+            "2d",
+            "7d",
+            "30d"
           ],
-          "timespan": "5m",
+          "timespan": "6h",
           "timefield": "created_at",
-          "index": "[twitter]",
-          "defaultindex": "NOINDEX",
+          "timeformat": "",
           "refresh": {
-            "enable": false,
+            "enable": true,
             "interval": 30,
             "min": 3
           },
-          "time": {
-            "from": "03/13/2013 23:04:13",
-            "to": "03/13/2013 23:09:13"
-          },
-          "index_interval": "day",
-          "timed_indices": true
-        },
-        {
-          "span": 4,
-          "editable": true,
-          "group": [
-            "default"
-          ],
-          "type": "stringquery",
-          "label": "Search",
-          "query": "place.country_code:us",
-          "size": 100,
-          "sort": [
-            "_score",
-            "desc"
-          ],
-          "multi": false,
-          "multi_arrange": "horizontal"
-        },
-        {
-          "span": 3,
-          "editable": true,
-          "group": [
-            "default"
-          ],
-          "type": "dashcontrol",
-          "save": {
-            "gist": true,
-            "elasticsearch": true,
-            "local": true,
-            "default": true
-          },
-          "load": {
-            "gist": true,
-            "elasticsearch": true,
-            "local": true
-          },
-          "elasticsearch_size": 20,
-          "elasticsearch_saveto": "kibana-int",
-          "error": false,
-          "temp_ttl": "30d",
-          "hide_control": false,
-          "temp": true,
-          "hide": false
+          "title": "Tweet Creation Date",
+          "filter_id": 0
         }
       ],
       "collapsable": true
@@ -115,7 +83,20 @@
             "twitter"
           ],
           "loading": false,
-          "spyable": true
+          "spyable": true,
+          "editorTabs": [
+            {
+              "title": "Queries",
+              "src": "partials/querySelect.html"
+            }
+          ],
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "title": "Countries"
         },
         {
           "span": 5,
@@ -130,7 +111,7 @@
               "label": "place.country_node:en"
             }
           ],
-          "interval": "5s",
+          "interval": "5m",
           "show": [
             "bars",
             "y-axis",
@@ -142,7 +123,34 @@
           "index": [
             "twitter"
           ],
-          "loading": false
+          "loading": false,
+          "mode": "count",
+          "time_field": "created_at",
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "value_field": null,
+          "auto_int": true,
+          "resolution": 100,
+          "linewidth": 3,
+          "spyable": true,
+          "zoomlinks": true,
+          "bars": true,
+          "stack": true,
+          "points": false,
+          "lines": false,
+          "legend": true,
+          "x-axis": true,
+          "y-axis": true,
+          "percentage": false,
+          "interactive": true,
+          "tooltip": {
+            "value_type": "cumulative",
+            "query_as_alias": false
+          }
         },
         {
           "span": 4,
@@ -164,7 +172,15 @@
             "twitter"
           ],
           "field": "place.country_code",
-          "loading": false
+          "loading": false,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "spyable": true,
+          "index_limit": 0
         }
       ],
       "collapsable": true
@@ -176,34 +192,13 @@
       "collapse": false,
       "panels": [
         {
-          "span": 2,
-          "editable": true,
-          "group": [
-            "default"
-          ],
-          "type": "fields",
-          "title": "Fields",
-          "style": {},
-          "arrange": "vertical",
-          "micropanel_position": "right",
-          "query": "place.country_code:en",
-          "index": [
-            "twitter"
-          ],
-          "error": false,
-          "sort": [
-            "created_at",
-            "desc"
-          ]
-        },
-        {
           "span": 10,
           "editable": true,
           "group": [
             "default"
           ],
           "type": "table",
-          "title": "Events",
+          "title": "Tweets",
           "query": "place.country_code:en",
           "size": 100,
           "offset": 0,
@@ -221,11 +216,85 @@
             "twitter"
           ],
           "error": false,
-          "loading": false
+          "loading": false,
+          "status": "Stable",
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "pages": 5,
+          "overflow": "height",
+          "highlight": [],
+          "sortable": true,
+          "header": true,
+          "paging": true,
+          "field_list": true,
+          "trimFactor": 300,
+          "normTimes": true,
+          "spyable": true
         }
       ],
       "collapsable": true
     }
   ],
-  "editable": true
+  "editable": true,
+  "style": "dark",
+  "failover": false,
+  "services": {
+    "query": {
+      "idQueue": [],
+      "list": {
+        "0": {
+          "id": 0,
+          "color": "#7EB26D",
+          "query": "*",
+          "alias": "",
+          "pin": false,
+          "type": "lucene"
+        }
+      },
+      "ids": [
+        0
+      ]
+    },
+    "filter": {
+      "idQueue": [],
+      "list": {
+        "0": {
+          "from": "2013-09-10T00:22:07.360Z",
+          "to": "2013-09-10T06:22:07.360Z",
+          "field": "created_at",
+          "type": "time",
+          "mandate": "must",
+          "active": true,
+          "alias": "",
+          "id": 0
+        }
+      },
+      "ids": [
+        0
+      ]
+    }
+  },
+  "loader": {
+    "save_gist": false,
+    "save_elasticsearch": true,
+    "save_local": true,
+    "save_default": true,
+    "save_temp": true,
+    "save_temp_ttl_enable": true,
+    "save_temp_ttl": "30d",
+    "load_gist": true,
+    "load_elasticsearch": true,
+    "load_elasticsearch_size": 20,
+    "load_local": true,
+    "hide": false
+  },
+  "index": {
+    "interval": "none",
+    "pattern": "_all",
+    "default": "twitter"
+  }
 }
