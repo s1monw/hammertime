@@ -82,7 +82,7 @@ curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
       "created_at" : "Wed Jun 18 16:04:28 +0000 2013",
       "id":214497014
    },
-   "text" : "Hello Stockholm! ;)",
+   "text" : "Hello GOTO Berlin! ;)",
    "created_at" : "Wed Jun 19 16:04:28 +0000 2013"
 }'
 
@@ -352,7 +352,7 @@ curl -s -XGET 'localhost:9200/twitter_production/_flush'
 
 # exclude all indices from this node....
 curl -s -XPUT 'localhost:9200/twitter_production,hacker_index/_settings?pretty=true' -d '{
-    "index.routing.allocation.exclude.name" : "snoop"
+    "index.routing.allocation.exclude._name" : "snoop"
 }'
 
 # Check paramedic
