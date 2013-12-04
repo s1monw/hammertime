@@ -82,7 +82,7 @@ curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
       "created_at" : "Wed Jun 18 16:04:28 +0000 2013",
       "id":214497014
    },
-   "text" : "Hello GOTO Berlin! ;)",
+   "text" : "Hello CodeMesh London",
    "created_at" : "Wed Jun 19 16:04:28 +0000 2013"
 }'
 
