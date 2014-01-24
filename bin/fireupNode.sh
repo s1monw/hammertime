@@ -23,19 +23,19 @@ fi
 CLUSTER=`eval whoami`
 PARENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 echo "Starting node "$1
-echo "cmd: "$PARENT"/elasticsearch/bin/elasticsearch -Des.cluster.name="$CLUSTER" -Des.path.data="$PARENT"/data -Des.node.name="$1" -p "$PARENT"/"$1".pid"
-$PARENT/elasticsearch/bin/elasticsearch -Des.cluster.name=$CLUSTER -Des.path.data=$PARENT/data -Des.node.name=$1 -p $PARENT/$1.pid
+echo "cmd: "$PARENT"/elasticsearch/bin/elasticsearch -d -Des.cluster.name="$CLUSTER" -Des.path.data="$PARENT"/data -Des.node.name="$1" -p "$PARENT"/"$1".pid"
+$PARENT/elasticsearch/bin/elasticsearch -d -Des.cluster.name=$CLUSTER -Des.path.data=$PARENT/data -Des.node.name=$1 -p $PARENT/$1.pid
 
-NODE_STATS=`curl -s -XGET 'http://localhost:9200/_cluster/nodes/'$1'/stats'`
+NODE_STATS=`curl -s -XGET 'http://localhost:9200/_nodes/'$1'/stats'`
 while [[ $? -eq 7 ]]; do
   echo "No node listening on port 9200. Retry after for 2 Seconds"
   sleep 2
-  NODE_STATS=`curl -s -XGET 'http://localhost:9200/_cluster/nodes/'$1'/stats'`
+  NODE_STATS=`curl -s -XGET 'http://localhost:9200/_nodes/'$1'/stats'`
 done
 while [[ `echo $NODE_STATS | grep "\"name\"" | wc -l` -eq 0 ]]; do
   echo "Node "${1}" has not joined the cluster yet. Retry after for 2 Seconds"
   sleep 2
-  NODE_STATS=`curl -s -XGET 'http://localhost:9200/_cluster/nodes/'$1'/stats'`
+  NODE_STATS=`curl -s -XGET 'http://localhost:9200/_nodes/'$1'/stats'`
 done 
 
 echo "Node "${1}" joined the cluster"

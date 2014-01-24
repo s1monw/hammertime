@@ -1,7 +1,7 @@
 #!/bin/bash
 CURRENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PARENT="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
-ES_VERSION="0.90.7"
+ES_VERSION="1.0.0.RC1"
 if [ -d ${PARENT}/elasticsearch ]; then
  echo "elasticsearch already exists in "${PARENT}" - skipping"
 else 

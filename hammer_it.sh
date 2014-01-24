@@ -62,7 +62,7 @@ curl -s -XGET 'localhost:9200/hacker_index/_search?q=simon&pretty=true'
 ./bin/fireupNode.sh ice-t
 
 # Check which Nodes are running
-curl -s -XGET 'http://localhost:9200/_cluster/nodes/stats?pretty=true' 
+curl -s -XGET 'http://localhost:9200/_cat/nodes?v' 
 
 # Ok lets move on and use some tools - tries to read from localhost:9200
 open http://karmi.github.io/elasticsearch-paramedic/
@@ -82,7 +82,7 @@ curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
       "created_at" : "Wed Jun 18 16:04:28 +0000 2013",
       "id":214497014
    },
-   "text" : "Hello CodeMesh London",
+   "text" : "Hello Berlin",
    "created_at" : "Wed Jun 19 16:04:28 +0000 2013"
 }'
 
@@ -95,7 +95,7 @@ open http://karmi.github.io/elasticsearch-paramedic/
 
 # what's happening? No Schema?
 # ElasticSearch deploys a default schema based on your data!
-curl -s -XGET 'http://localhost:9200/twitter/_mapping?pretty=true'
+curl -s -XGET 'http://localhost:9200/twitter/_mapping?format=yaml&pretty=true'
 
 # Dude, some redundancy would be awesome!
 # Scale out replicas dynamically!
