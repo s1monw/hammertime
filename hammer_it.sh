@@ -25,7 +25,7 @@
 ./bin/fireupNode.sh mc-hammer
 
 # "Is it running?"
-curl -s -XGET 'http://localhost:9200?pretty=true'
+curl -s 'http://localhost:9200?pretty=true'
 
 
 #####################################################################################
@@ -47,13 +47,20 @@ curl -s -XPUT 'http://localhost:9200/hacker_index/hacker/1?pretty=true' -d '{
 
 # Is it there? - NoSQL you know! 
 # This operation is RealTime... "did he say realtime?" ;)
-curl -s -XGET 'localhost:9200/hacker_index/hacker/1?pretty=true' 
+curl -s 'localhost:9200/hacker_index/hacker/1?pretty=true' 
 
 # Or just search - Lucene you know! 
 # This operation is NearRealTime ~1 second default delay
-curl -s -XGET 'localhost:9200/hacker_index/_search?q=simon&pretty=true'
+curl -s 'localhost:9200/hacker_index/_search?q=simon&pretty=true'
 
-# Looks pretty manual doesn't it...?
+# Check how healthy our cluster is...
+curl -s 'http://localhost:9200/_cat/health?v'
+
+# For the terminal oriented folks among us we can also get similar infos from
+# the commandline
+curl -s 'localhost:9200/_cat/shards?v'
+
+# Not too fancy isn't it?
 
 #####################################################################################
 # Let's get started and create an index and push some real data in
@@ -62,7 +69,7 @@ curl -s -XGET 'localhost:9200/hacker_index/_search?q=simon&pretty=true'
 ./bin/fireupNode.sh ice-t
 
 # Check which Nodes are running
-curl -s -XGET 'http://localhost:9200/_cat/nodes?v' 
+curl -s 'http://localhost:9200/_cat/nodes?v' 
 
 # Ok lets move on and use some tools - tries to read from localhost:9200
 open http://karmi.github.io/elasticsearch-paramedic/
@@ -90,12 +97,9 @@ curl -s -XPUT 'http://localhost:9200/twitter/status/xXx?pretty=true' -d '
 # just push the raw data into ElasticSearch
 # cat raw_data.json | bin/stream2es stdin -i twitter -t status
 
-# Check Paramedic again
-open http://karmi.github.io/elasticsearch-paramedic/
-
 # what's happening? No Schema?
 # ElasticSearch deploys a default schema based on your data!
-curl -s -XGET 'http://localhost:9200/twitter/_mapping?format=yaml&pretty=true'
+curl -s 'http://localhost:9200/twitter/_mapping?format=yaml&pretty=true'
 
 # Dude, some redundancy would be awesome!
 # Scale out replicas dynamically!
@@ -123,94 +127,18 @@ open http://karmi.github.io/elasticsearch-paramedic/
 #####################################################################################
 
 # Perfect let's explore the data we have so far....
-curl -s -XGET 'http://localhost:9200/twitter/_search?pretty=true'
+curl -s 'http://localhost:9200/twitter/_search?pretty=true'
 
 # gimme everything with country = United States
 curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
     "query": { 
-        "filtered" : {
-            "query" : {
-                "match_all": {} 
-            },
-            "filter" : {
-                "query": {
-                  "match": {
-                     "place.country" : {
-                        "query" : "United States",
-                        "operator" : "and"
-                     }
-                  }
-                }
-            }
-        }
-    }
-}
-'
-
-# a simple match query on field 'text' - you might wanna change the query :)
-curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
-    "query": { 
-        "filtered" : {
-            "query" : {
-                "match": { "text" : "LOL" } 
-            },
-            "filter" : {
-                "query": {
-                  "match": {
-                     "place.country" : {
-                        "query" : "United States",
-                        "operator" : "and"
-                     }
-                  }
-                }
+        "match": {
+            "place.country.keyword" : {
+                "query" : "United States"
             }
         }
     }
 }'
-
-# with common terms query 
-curl -s -XGET 'localhost:9200/twitter/_search?pretty=true' -d '{
-    "query": { 
-        "filtered" : {
-            "query" : {
-                "match": { 
-                    "text" :  {
-                        "query" : "this is",
-                        "cutoff_frequency" : 0.01
-                    }
-                } 
-            },
-            "filter" : {
-                "query": {
-                  "match": {
-                     "place.country" : {
-                        "query" : "United States",
-                        "operator" : "and"
-                     }
-                  }
-                }
-            }
-        }
-    }
-}'
-
-# or do "Search As You Type" / Query Suggestions
-curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
-    "query": { 
-        "match_phrase_prefix": { 
-            "user.name" : "simon willn"
-        }
-    },
-    "facets": {
-       "user_handles": {
-          "terms": {
-            "field" : "user.screen-name",
-            "size" : 10
-          }
-       }
-    }
-}'
-
 
 #####################################################################################
 # Find active countries and get the total counts...
@@ -222,53 +150,16 @@ curl -s -XPOST 'localhost:9200/twitter/_search?pretty=true' -d '{
 #####################################################################################
 curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d '{
     "query": { 
-        "constant_score": {
-           "filter": {
-               "range" : {
-                    "created_at" : { 
-                        "from" : "now-10d", 
-                        "to" : "now", 
-                        "include_lower" : true, 
-                        "include_upper": false
-                    }           
-                }
-            }
-        } 
+        "range" : {
+            "created_at" : { 
+                "from" : "now-50m", 
+                "to" : "now", 
+                "include_lower" : true, 
+                "include_upper": false
+            }           
+        }
     },
-    "facets": {
-       "active_countries": {
-          "terms": {
-            "field" : "place.country_code",
-            "size" : 10
-          }
-       }
-    }
-}'
-
-#####################################################################################
-# OK awesome but why do we have to use the country code? - We can facet on the country
-# keyword, no?
-#
-# NOTE: we now facet on  place.country.keyword rather than place.country_code
-#       Keywords are very useful when working with facets - keep that in mind!
-#####################################################################################
-
-curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d '{
-    "query": { 
-        "constant_score": {
-           "filter": {
-               "range" : {
-                    "created_at" : { 
-                        "from" : "now-10d", 
-                        "to" : "now", 
-                        "include_lower" : true, 
-                        "include_upper": false
-                    }           
-                }
-            }
-        } 
-    },
-    "facets": {
+    "aggs": {
        "active_countries": {
           "terms": {
             "field" : "place.country.keyword",
@@ -278,6 +169,50 @@ curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d
     }
 }'
 
+
+#####################################################################################
+# OK let's go crazy...
+# 
+# Let aggregate through tweets of the last 50 minutes and get the top countries
+# the tweets are coming and group them by a geo-hash prefix of their geo location
+# as well as a histogram when the tweets were created...
+#####################################################################################
+curl -s -XPOST 'localhost:9200/twitter/_search?search_type=count&pretty=true' -d '{
+    "query": { 
+        "range" : {
+            "created_at" : { 
+                "from" : "now-50m", 
+                "to" : "now", 
+                "include_lower" : true, 
+                "include_upper": false
+            }           
+        }
+    },
+    "aggs": {
+        "active_countries": {
+            "terms": {
+                "field": "place.country.keyword",
+                "size": 5 
+            },
+            "aggs": {
+                "geo_hash": {
+                    "geohashgrid": {
+                        "field": "coordinates",
+                        "precision": 2,
+                        "size": 3
+                    }
+                },
+                "over_time": {
+                    "date_histogram": {
+                        "field": "created_at",
+                        "interval": "5m",
+                        "format" : "yyyy-MM-dd HH:mm"
+                    }
+                } 
+            }
+        }
+    }
+}'
 #####################################################################################
 # So what can I do with it?
 # Lets take this into something real...
@@ -307,10 +242,10 @@ curl -s -XPUT 'http://localhost:9200/twitter_ng/'
 #cat raw_data.json | bin/stream2es stdin -i twitter_ng -t status
 
 # Make sure we can see the data...
-curl -s -XGET 'http://localhost:9200/twitter,twitter_ng/_refresh?pretty=true'
+curl -s 'http://localhost:9200/twitter,twitter_ng/_refresh?pretty=true'
 
 # Now you can simply search across both indices as it would be a single one
-curl -s -XGET 'http://localhost:9200/twitter,twitter_ng/_search?pretty=true'
+curl -s 'http://localhost:9200/twitter,twitter_ng/_search?pretty=true'
 
 # If you don't want to expose all those names and make URLs more complex you can use
 # and alias....
@@ -335,10 +270,10 @@ curl -s -XPOST 'http://localhost:9200/_aliases' -d '{
 }' 
 
 # Now you can simply search across both indices via the alias
-curl -s -XGET 'http://localhost:9200/twitter_production/_search?pretty=true'
+curl -s 'http://localhost:9200/twitter_production/_search?pretty=true'
 
 # Or with the filter applied...
-curl -s -XGET 'http://localhost:9200/twitter_us_only/_search?pretty=true'
+curl -s 'http://localhost:9200/twitter_us_only/_search?pretty=true'
 
 #####################################################################################
 # Let's go back and do some maintenance...
@@ -348,7 +283,7 @@ curl -s -XGET 'http://localhost:9200/twitter_us_only/_search?pretty=true'
 #####################################################################################
 
 # ok lets flush all RAM buffers to disk and empty transaction logs before we shut down
-curl -s -XGET 'localhost:9200/twitter_production/_flush'
+curl -s 'localhost:9200/twitter_production/_flush'
 
 # exclude all indices from this node....
 curl -s -XPUT 'localhost:9200/twitter_production,hacker_index/_settings?pretty=true' -d '{
