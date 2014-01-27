@@ -71,8 +71,8 @@ curl -s 'localhost:9200/_cat/shards?v'
 # Check which Nodes are running
 curl -s 'http://localhost:9200/_cat/nodes?v' 
 
-# Ok lets move on and use some tools - tries to read from localhost:9200
-open http://karmi.github.io/elasticsearch-paramedic/
+# How is the shard status on our nodes?
+curl -s 'http://localhost:9200/_cat/shards?v' 
 
 # Start indexing twitter
 # curl -s -O download.elasticsearch.org/stream2es/stream2es; chmod +x stream2es
@@ -110,14 +110,14 @@ curl -s -XPUT 'localhost:9200/twitter/_settings' -d '{
     }
 }'
 
-# Check Paramedic again
-open http://karmi.github.io/elasticsearch-paramedic/
+# it's replicating.....
+curl -s 'http://localhost:9200/_cat/shards?v' 
 
 # Awesome now we have replicas and indexed some data lets move on and add another node
 ./bin/fireupNode.sh snoop
 
-# Check Paramedic again
-open http://karmi.github.io/elasticsearch-paramedic/
+# it's relocating.....
+curl -s 'http://localhost:9200/_cat/shards?v' 
 
 
 #####################################################################################
@@ -292,13 +292,11 @@ curl -s -XPUT 'localhost:9200/twitter_production,hacker_index/_settings?pretty=t
     "index.routing.allocation.exclude._name" : "snoop"
 }'
 
-# Check paramedic
-open http://karmi.github.io/elasticsearch-paramedic/
+# Check out if something is moving here?
+curl -s 'http://localhost:9200/_cat/shards?v' 
 
 # now we can shut down that node
 ./bin/takedownNode.sh snoop
-
-
 
 # Bring down all nodes...
 ./bin/takedownNode.sh ice-t
