@@ -225,6 +225,8 @@ git clone git@github.com:elasticsearch/kibana.git
 cd kibana &&  python -m SimpleHTTPServer # start a python webserver
 open http://localhost:8000
 
+# check out http://demo.kibana.org
+
 # Once you are done load the dashboard.json file contained in the current folder via the UI
 # and see the magic :) - enjoy!
 
